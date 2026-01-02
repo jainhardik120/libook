@@ -2,12 +2,7 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { HugeiconsIcon } from '@hugeicons/react';
-import {
-  ArrowLeft01Icon,
-  ArrowRight01Icon,
-  MoreHorizontalCircle01Icon,
-} from '@hugeicons/core-free-icons';
+import { ChevronLeftIcon, ChevronRightIcon, MoreHorizontalIcon } from 'lucide-react';
 
 function Pagination({ className, ...props }: React.ComponentProps<'nav'>) {
   return (
@@ -61,7 +56,7 @@ function PaginationPrevious({ className, ...props }: React.ComponentProps<typeof
       className={cn('pl-1.5!', className)}
       {...props}
     >
-      <HugeiconsIcon icon={ArrowLeft01Icon} strokeWidth={2} data-icon="inline-start" />
+      <ChevronLeftIcon data-icon="inline-start" />
       <span className="hidden sm:block">Previous</span>
     </PaginationLink>
   );
@@ -76,7 +71,7 @@ function PaginationNext({ className, ...props }: React.ComponentProps<typeof Pag
       {...props}
     >
       <span className="hidden sm:block">Next</span>
-      <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} data-icon="inline-end" />
+      <ChevronRightIcon data-icon="inline-end" />
     </PaginationLink>
   );
 }
@@ -92,7 +87,7 @@ function PaginationEllipsis({ className, ...props }: React.ComponentProps<'span'
       )}
       {...props}
     >
-      <HugeiconsIcon icon={MoreHorizontalCircle01Icon} strokeWidth={2} />
+      <MoreHorizontalIcon />
       <span className="sr-only">More pages</span>
     </span>
   );

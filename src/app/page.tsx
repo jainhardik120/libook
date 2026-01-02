@@ -1,5 +1,10 @@
-import { ComponentExample } from '@/components/component-example';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 export default function Page() {
-  return <ComponentExample />;
+  return (
+    <div>
+      Hello World
+      <ThemeToggle />
+    </div>
+  );
 }
