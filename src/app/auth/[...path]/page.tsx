@@ -68,7 +68,7 @@ export default async function Page(props: Readonly<PageProps<'/auth/[...path]'>>
           <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
             <BookIcon className="size-4" />
           </div>
-          Libook
+          LiBook
         </Link>
         <div className="flex flex-col gap-6">
           <Card>

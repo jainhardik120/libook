@@ -34,7 +34,7 @@ const Slider = ({
       {...props}
     >
       <SliderPrimitive.Track
-        className="bg-muted bg-muted relative grow overflow-hidden rounded-none data-horizontal:h-1 data-horizontal:w-full data-vertical:h-full data-vertical:w-1"
+        className="bg-muted relative grow overflow-hidden rounded-none data-horizontal:h-1 data-horizontal:w-full data-vertical:h-full data-vertical:w-1"
         data-slot="slider-track"
       >
         <SliderPrimitive.Range

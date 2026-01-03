@@ -41,22 +41,6 @@ const eslintConfig = defineConfig([
       ],
 
       '@typescript-eslint/consistent-type-imports': 'error',
-
-      '@typescript-eslint/naming-convention': [
-        'warn',
-        {
-          selector: ['property'],
-
-          filter: {
-            regex: '^(data-|aria-|on[A-Z])',
-            match: false,
-          },
-
-          format: ['camelCase'],
-          leadingUnderscore: 'allow',
-        },
-      ],
-
       '@typescript-eslint/no-confusing-void-expression': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-floating-promises': 'error',
