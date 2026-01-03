@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unassigned-import
 import 'server-only';
 
 import { cache } from 'react';
@@ -48,7 +49,7 @@ export const prefetch = <S extends ResolverDef, T extends ReturnType<TRPCQueryOp
   const queryClient = getQueryClient();
   const options = queryOptions(trpc);
   if (options.queryKey[1]?.type === 'infinite') {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
     void queryClient.prefetchInfiniteQuery(options as any);
   } else {
     void queryClient.prefetchQuery(options);

@@ -3,9 +3,9 @@ import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { twoFactor } from 'better-auth/plugins';
 
+import { db } from '@/db';
 import * as schema from '@/db/auth-schema';
 // import ResetPasswordEmail from '@/emails/reset-password';
-import { db } from '@/db';
 import { env } from '@/lib/env';
 // import { sendSESEmail } from '@/lib/send-email';
 

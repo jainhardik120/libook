@@ -1,10 +1,13 @@
-import type { Metadata } from 'next';
 import { Geist, Geist_Mono, JetBrains_Mono } from 'next/font/google';
+
 import './globals.css';
-import { ThemeProvider } from '@/components/theme-provider';
-import { TRPCReactProvider } from '@/server/react';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
+
+import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
+import { TRPCReactProvider } from '@/server/react';
+
+import type { Metadata } from 'next';
 
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -29,14 +32,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={jetbrainsMono.variable} suppressHydrationWarning>
+    <html className={jetbrainsMono.variable} lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <NuqsAdapter>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
-            enableSystem
             disableTransitionOnChange
+            enableSystem
           >
             <TRPCReactProvider>{children}</TRPCReactProvider>
             <Toaster />

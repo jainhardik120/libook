@@ -1,5 +1,6 @@
 import { ThemeToggle } from '@/components/theme-toggle';
 import { fetchQuery } from '@/server/server';
+
 import CreateBookButton from './create-book-button';
 
 export default async function Page() {

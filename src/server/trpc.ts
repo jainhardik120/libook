@@ -2,8 +2,8 @@ import { initTRPC } from '@trpc/server';
 import superjson from 'superjson';
 import { treeifyError, ZodError } from 'zod';
 
-import logger from '@/lib/logger';
 import { db } from '@/db';
+import logger from '@/lib/logger';
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
