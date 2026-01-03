@@ -7,6 +7,10 @@ export const env = createEnv({
     NODE_ENV: z.enum(['development', 'test', 'production']),
     GITHUB_CLIENT_ID: z.string(),
     GITHUB_CLIENT_SECRET: z.string(),
+    AWS_ACCESS_KEY_ID: z.string(),
+    AWS_SECRET_ACCESS_KEY: z.string(),
+    AWS_REGION: z.string(),
+    AWS_BUCKET_NAME: z.string(),
   },
   client: {
     NEXT_PUBLIC_BASE_URL: z.string().optional(),
@@ -20,6 +24,10 @@ export const env = createEnv({
     NODE_ENV: process.env['NODE_ENV'],
     GITHUB_CLIENT_ID: process.env['GITHUB_CLIENT_ID'],
     GITHUB_CLIENT_SECRET: process.env['GITHUB_CLIENT_SECRET'],
+    AWS_ACCESS_KEY_ID: process.env['AWS_ACCESS_KEY_ID'],
+    AWS_SECRET_ACCESS_KEY: process.env['AWS_SECRET_ACCESS_KEY'],
+    AWS_REGION: process.env['AWS_REGION'],
+    AWS_BUCKET_NAME: process.env['AWS_BUCKET_NAME'],
   },
   skipValidation:
     process.env['SKIP_ENV_VALIDATION'] !== undefined &&

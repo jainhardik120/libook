@@ -1,21 +1,11 @@
-import { book } from '@/db/schema';
-import { createTRPCRouter, publicProcedure } from '@/server/trpc';
+import { createTRPCRouter } from '@/server/trpc';
+
+import { bookRouter } from './book';
 
 import type { inferRouterOutputs, inferRouterInputs } from '@trpc/server';
 
 export const appRouter = createTRPCRouter({
-  getAllBooks: publicProcedure.query(({ ctx }) => {
-    return ctx.db.select().from(book);
-  }),
-  createNewBook: publicProcedure.mutation(({ ctx }) => {
-    return ctx.db.insert(book).values({
-      title: 'title',
-      author: 'author',
-      genre: 'genre',
-      price: 'price',
-      publish_date: 'publish_date',
-    });
-  }),
+  book: bookRouter,
 });
 
 export type AppRouter = typeof appRouter;

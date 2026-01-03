@@ -15,6 +15,20 @@
       "when": 1767381343062,
       "tag": "0001_workable_liz_osborn",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1767432226232,
+      "tag": "0002_fuzzy_abomination",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1767435113100,
+      "tag": "0003_jittery_sleeper",
+      "breakpoints": true
     }
   ]
 }
