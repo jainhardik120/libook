@@ -1,7 +1,7 @@
 import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { TRPCError } from '@trpc/server';
-import { and, eq, isNull } from 'drizzle-orm';
+import { and, desc, eq, gt, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
 
 import { book, folder } from '@/db/schema';
@@ -115,6 +115,32 @@ export const bookRouter = createTRPCRouter({
     return {
       presignedUrl,
       ...foundBook[0],
+    };
+  }),
+  searchBooks: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
+    const bookResults = await ctx.db
+      .select()
+      .from(book)
+      .where(
+        and(
+          gt(sql`similarity(${book.title}, ${input})`, 0.1),
+          eq(book.userId, ctx.session.user.id),
+        ),
+      )
+      .orderBy(desc(sql`similarity(${book.title}, ${input})`));
+    const folderResults = await ctx.db
+      .select()
+      .from(folder)
+      .where(
+        and(
+          gt(sql`similarity(${folder.name}, ${input})`, 0.1),
+          eq(folder.userId, ctx.session.user.id),
+        ),
+      )
+      .orderBy(desc(sql`similarity(${folder.name}, ${input})`));
+    return {
+      books: bookResults,
+      folders: folderResults,
     };
   }),
 });

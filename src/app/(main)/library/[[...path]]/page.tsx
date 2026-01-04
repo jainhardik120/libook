@@ -23,7 +23,7 @@ export default async function Page({ params }: PageProps<'/library/[[...path]]'>
           return (
             <Link
               key={folder.id}
-              className="bg-primary/25 border-primary flex aspect-square flex-col items-center justify-center gap-2 border p-2"
+              className="bg-primary/25 border-primary flex aspect-square flex-col items-center justify-center gap-2 border p-2 text-center"
               href={`/library/${folder.id}`}
             >
               <FolderIcon className="text-primary size-16" />
@@ -35,7 +35,7 @@ export default async function Page({ params }: PageProps<'/library/[[...path]]'>
           return (
             <Link
               key={book.id}
-              className="bg-primary/25 border-primary flex aspect-square flex-col items-center justify-center gap-2 border p-2"
+              className="bg-primary/25 border-primary flex aspect-square flex-col items-center justify-center gap-2 border p-2 text-center"
               href={`/book/${book.id}`}
             >
               <BookIcon className="text-primary size-16" />
