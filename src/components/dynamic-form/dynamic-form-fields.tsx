@@ -521,9 +521,6 @@ export const RenderFormInput = <T extends FieldValues = FieldValues>({
   formField: FormField<T>;
 }) => {
   const RenderedInput = RenderedFormFields[type];
-  if (RenderedInput === undefined) {
-    throw new Error(`RenderedFormFields.${type} is undefined`);
-  }
   return <RenderedInput field={field} formField={formField} />;
 };
 

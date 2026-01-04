@@ -1,5 +1,6 @@
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { TRPCError } from '@trpc/server';
 import { and, eq, isNull } from 'drizzle-orm';
 import { z } from 'zod';
 
@@ -94,5 +95,26 @@ export const bookRouter = createTRPCRouter({
       .select()
       .from(book)
       .where(and(eq(book.userId, ctx.session.user.id), filter));
+  }),
+  getBookData: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
+    const foundBook = await ctx.db.select().from(book).where(eq(book.id, input));
+    if (foundBook.length === 0) {
+      throw new TRPCError({ code: 'NOT_FOUND' });
+    }
+    const key = foundBook[0].pdfFileS3Path;
+    if (key === null || key === '') {
+      throw new TRPCError({ code: 'NOT_FOUND' });
+    }
+    const command = new GetObjectCommand({
+      Bucket: env.AWS_BUCKET_NAME,
+      Key: key,
+    });
+    const presignedUrl = await getSignedUrl(s3Client, command, {
+      expiresIn: 3600,
+    });
+    return {
+      presignedUrl,
+      ...foundBook[0],
+    };
   }),
 });
