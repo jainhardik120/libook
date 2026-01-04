@@ -398,8 +398,8 @@ const RenderedFileUploadInput = <T extends FieldValues = FieldValues>(props: Fie
         <div
           {...getRootProps()}
           className={cn(
-            isDragActive ? 'border-primary bg-primary/10 ring-primary/20 ring-2' : 'border-border',
-            'mt-2 flex justify-center rounded-md border border-dashed px-6 py-20 transition-colors duration-200',
+            isDragActive ? 'border-primary bg-primary/10 ring-primary/20' : 'border-input',
+            'dark:bg-input/30 flex justify-center rounded-none border bg-transparent px-6 py-20 transition-colors duration-200',
           )}
         >
           <div>
@@ -427,24 +427,9 @@ const RenderedFileUploadInput = <T extends FieldValues = FieldValues>(props: Fie
       <div>
         {[...files, ...previouslyUploadedFiles].map((file) => (
           <div
-            key={isS3File(file) ? file.key : file}
-            className="border-border/50 relative gap-2 border-b p-4 last:border-b-0"
+            key={isS3File(file) ? (file.key ?? file.name) : file}
+            className="border-border/50 relative gap-2 border-b py-2 last:border-b-0"
           >
-            {!isS3File(file) ||
-              (isS3File(file) && file.uploadStatus !== 'uploading' && (
-                <Button
-                  aria-label="Remove"
-                  className="text-muted-foreground hover:text-foreground absolute top-1 right-1 h-8 w-8"
-                  size="icon"
-                  type="button"
-                  variant="ghost"
-                  onClick={() => {
-                    removeFile(file);
-                  }}
-                >
-                  <X aria-hidden className="h-5 w-5 shrink-0" />
-                </Button>
-              ))}
             <div className="flex items-center space-x-2.5">
               <span className="bg-background ring-border flex h-10 w-10 shrink-0 items-center justify-center rounded-sm shadow-sm ring-1 ring-inset">
                 <FileIcon aria-hidden className="text-foreground h-5 w-5" />
@@ -462,6 +447,21 @@ const RenderedFileUploadInput = <T extends FieldValues = FieldValues>(props: Fie
                   <p className="text-foreground text-xs font-medium">{file}</p>
                 </div>
               )}
+              {!isS3File(file) ||
+                (isS3File(file) && file.uploadStatus !== 'uploading' && (
+                  <Button
+                    aria-label="Remove"
+                    className="text-muted-foreground hover:text-foreground h-8 w-8"
+                    size="icon"
+                    type="button"
+                    variant="ghost"
+                    onClick={() => {
+                      removeFile(file);
+                    }}
+                  >
+                    <X aria-hidden className="h-5 w-5 shrink-0" />
+                  </Button>
+                ))}
             </div>
             {isS3File(file) && file.uploadStatus !== 'idle' && (
               <div className="flex items-center space-x-3">
