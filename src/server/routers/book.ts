@@ -18,33 +18,51 @@ const s3Client = new S3Client({
 });
 
 export const bookRouter = createTRPCRouter({
-  getSignedUrlForUploadingFile: protectedProcedure
+  getSignedUrlForUploadingFiles: protectedProcedure
     .input(
-      z.object({
-        filename: z.string(),
-        contentType: z.string(),
-      }),
+      z.array(
+        z.object({
+          filename: z.string(),
+          contentType: z.string(),
+        }),
+      ),
     )
     .mutation(async ({ ctx, input }) => {
-      const timestamp = new Date().getTime();
-      const key = `${ctx.session.user.id}/${timestamp}-${input.filename}`;
-      const signedUrl = await getSignedUrl(
-        s3Client,
-        new PutObjectCommand({
-          Bucket: env.AWS_BUCKET_NAME,
-          Key: key,
-          ContentType: input.contentType,
+      const uploadUrls = await Promise.all(
+        input.map(async (file) => {
+          const key = `${ctx.session.user.id}/${new Date().getTime()}-${file.filename}`;
+          const command = new PutObjectCommand({
+            Bucket: env.AWS_BUCKET_NAME,
+            Key: key,
+            ContentType: file.contentType,
+          });
+          const presignedUrl = await getSignedUrl(s3Client, command, {
+            expiresIn: 3600,
+          });
+          return {
+            fileName: file.filename,
+            uploadUrl: presignedUrl,
+            key,
+          };
         }),
       );
-      return { signedUrl, key };
+      const map = new Map<string, { key: string; uploadUrl: string }>();
+      uploadUrls.forEach((uploadUrl) => {
+        map.set(uploadUrl.fileName, {
+          key: uploadUrl.key,
+          uploadUrl: uploadUrl.uploadUrl,
+        });
+      });
+      return map;
     }),
   createBook: protectedProcedure
     .input(z.object({ schema: createBookSchema, parentFolder: z.string() }))
     .mutation(async ({ ctx, input }) => {
       await ctx.db.insert(book).values({
         title: input.schema.title,
-        thumbnailImageS3Path: input.schema.thumbnailImageS3Path,
-        pdfFileS3Path: input.schema.pdfFileS3Path,
+        thumbnailImageS3Path:
+          input.schema.thumbnailImageS3Path.length > 0 ? input.schema.thumbnailImageS3Path[0] : '',
+        pdfFileS3Path: input.schema.pdfFileS3Path.length > 0 ? input.schema.pdfFileS3Path[0] : '',
         userId: ctx.session.user.id,
         parentFolder: input.parentFolder.length > 0 ? input.parentFolder : null,
       });

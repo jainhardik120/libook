@@ -9,11 +9,11 @@ const BookUploadForm = ({ parentFolder }: { parentFolder: string }) => {
   const mutation = useTRPCMutation((trpc) => trpc.book.createBook.mutationOptions());
   return (
     <MutationModal
-      button={<Button>Upload Book</Button>}
+      button={<Button variant="outline">Upload Book</Button>}
       defaultValues={{
         title: '',
-        thumbnailImageS3Path: '',
-        pdfFileS3Path: '',
+        thumbnailImageS3Path: [],
+        pdfFileS3Path: [],
       }}
       fields={[
         {
@@ -29,7 +29,11 @@ const BookUploadForm = ({ parentFolder }: { parentFolder: string }) => {
         {
           name: 'pdfFileS3Path',
           label: 'PDF File S3 Path',
-          type: 'input',
+          type: 'file',
+          maxFiles: 1,
+          accept: {
+            'application/pdf': [],
+          },
         },
       ]}
       mutation={{
