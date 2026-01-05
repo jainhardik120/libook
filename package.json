@@ -9,7 +9,7 @@
     "lint": "eslint",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx,mjs}\" --cache",
     "lint:report": "ts-node ./src/scripts/eslint-out.ts"
   },
   "dependencies": {
@@ -61,8 +61,11 @@
     "zod": "4.0.17"
   },
   "devDependencies": {
+    "@eslint/compat": "^2.0.0",
+    "@eslint/eslintrc": "^3.3.3",
     "@serwist/turbopack": "^9.4.2",
     "@tailwindcss/postcss": "^4",
+    "@types/eslint-plugin-security": "^3.0.0",
     "@types/node": "^20",
     "@types/pg": "^8.16.0",
     "@types/react": "^19",
@@ -71,6 +74,10 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
     "eslint-plugin-prefer-arrow-functions": "^3.9.1",
+    "eslint-plugin-promise": "^7.2.1",
+    "eslint-plugin-react-prefer-function-component": "^5.0.0",
+    "eslint-plugin-security": "^3.0.1",
+    "eslint-plugin-sonarjs": "^3.0.5",
     "prettier": "^3.7.4",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "serwist": "^9.4.2",
