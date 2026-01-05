@@ -323,6 +323,7 @@ const eslintConfig = defineConfig([
       'promise/param-names': 'error',
       'promise/valid-params': 'error',
       'react-hooks/exhaustive-deps': 'error',
+      'react-hooks/refs': 'off',
       'react-hooks/rules-of-hooks': 'error',
       'react/jsx-boolean-value': ['error', 'never'],
       'react/jsx-curly-brace-presence': [

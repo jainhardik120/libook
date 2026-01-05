@@ -45,6 +45,7 @@ const FormComponent = <T extends FieldValues, MutationResult>(
     'defaultValues' | 'fields' | 'schema' | 'mutation' | 'submitButtonText'
   > & {
     onSubmit: (values: z.infer<typeof props.schema>) => void;
+    submissionError?: string;
   },
 ) => (
   <DynamicForm
@@ -52,6 +53,7 @@ const FormComponent = <T extends FieldValues, MutationResult>(
     fields={props.fields}
     schema={props.schema}
     showSubmitButton
+    submissionError={props.submissionError}
     submitButtonDisabled={props.mutation.isPending}
     submitButtonText={props.submitButtonText ?? 'Save'}
     onSubmit={props.onSubmit}
@@ -63,17 +65,21 @@ const MutationModal = <T extends FieldValues, MutationResult>(
 ) => {
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
+  const [submissionError, setSubmissionError] = useState<string | undefined>();
+  const clearSubmissionError = () => {
+    setSubmissionError(undefined);
+  };
   const onSubmit = (values: z.infer<typeof props.schema>) => {
     props.mutation
       .mutateAsync(values)
       .then((result) => {
+        clearSubmissionError();
         toast(props.successToast(result));
         setOpen(false);
         return props.refresh?.();
       })
       .catch((err) => {
-        setOpen(false);
-        toast.error(err instanceof Error ? err.message : String(err));
+        setSubmissionError(err instanceof Error ? err.message : String(err));
       });
   };
   if (isMobile) {
@@ -85,7 +91,7 @@ const MutationModal = <T extends FieldValues, MutationResult>(
             <DrawerTitle>{props.titleText}</DrawerTitle>
           </DrawerHeader>
           {props.customDescription}
-          <FormComponent {...props} onSubmit={onSubmit} />
+          <FormComponent {...props} submissionError={submissionError} onSubmit={onSubmit} />
         </DrawerContent>
       </Drawer>
     );
@@ -98,7 +104,7 @@ const MutationModal = <T extends FieldValues, MutationResult>(
           <DialogTitle>{props.titleText}</DialogTitle>
         </DialogHeader>
         {props.customDescription}
-        <FormComponent {...props} onSubmit={onSubmit} />
+        <FormComponent {...props} submissionError={submissionError} onSubmit={onSubmit} />
       </DialogContent>
     </Dialog>
   );

@@ -1,15 +1,9 @@
 'use client';
 
-import { type ReactNode, type Ref, useEffect } from 'react';
+import { type ReactNode, type Ref, useEffect, useImperativeHandle, useRef } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  type DeepPartial,
-  useForm,
-  type UseFormReturn,
-  type FieldValues,
-  type DefaultValues,
-} from 'react-hook-form';
+import { useForm, type UseFormReturn, type FieldValues, type DefaultValues } from 'react-hook-form';
 import { type z } from 'zod';
 
 import {
@@ -39,14 +33,14 @@ type Props<Input extends FieldValues, Output> = {
   submitButtonText?: string;
   submitButtonDisabled?: boolean;
   FormFooter?: ({ form }: { form: UseFormReturn<Input, unknown, Input> }) => ReactNode;
-  onValuesChange?: (values: DeepPartial<Output>) => void;
   showSubmitButton?: boolean;
   ref?: Ref<UseFormReturn<Input, unknown, Output>>;
   className?: string;
+  submissionError?: string;
 };
 
 const DynamicForm = <T extends FieldValues>(props: Props<T, T>) => {
-  const { onValuesChange, defaultValues } = props;
+  const { defaultValues } = props;
   type FormData = T;
 
   const form = useForm<FormData>({
@@ -54,29 +48,18 @@ const DynamicForm = <T extends FieldValues>(props: Props<T, T>) => {
     defaultValues: props.defaultValues,
   });
 
-  if (props.ref !== undefined && props.ref !== null) {
-    if (typeof props.ref === 'function') {
-      props.ref(form);
-    } else {
-      props.ref.current = form;
+  useImperativeHandle(props.ref, () => form, [form]);
+
+  const prevDefaultValuesRef = useRef<string>('');
+
+  useEffect(() => {
+    const serializedValues = JSON.stringify(defaultValues);
+    if (prevDefaultValuesRef.current !== serializedValues) {
+      prevDefaultValuesRef.current = serializedValues;
+      form.reset({
+        ...defaultValues,
+      });
     }
-  }
-
-  useEffect(() => {
-    const subscription = form.watch((values) => {
-      if (onValuesChange !== undefined) {
-        onValuesChange(values);
-      }
-    });
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [form, onValuesChange]);
-
-  useEffect(() => {
-    form.reset({
-      ...defaultValues,
-    });
   }, [defaultValues, form]);
 
   return (
@@ -115,6 +98,9 @@ const DynamicForm = <T extends FieldValues>(props: Props<T, T>) => {
             )}
           />
         ))}
+        {props.submissionError !== undefined && (
+          <p className={cn('text-destructive text-sm')}>{props.submissionError}</p>
+        )}
         {props.showSubmitButton === true && (
           <Button disabled={props.submitButtonDisabled} type="submit">
             {props.submitButtonText ?? 'Submit'}
